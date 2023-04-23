@@ -1,36 +1,58 @@
-<div class="row">
-      
-  <div class="col-sm-5">
-      <h2>Login</h2>
-      <form method="post" action="/login">
-          username: <input type="text"
-                           autocomplete="username"
-                           name="username"><br>
-          passphrase: <input  type="password"
-                              autocomplete="passphrase"
-                              name="passphrase"><br>
-          <input type="submit">
-      </form>
-  </div>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login and Signup</title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-5">
+				<h2>Login</h2>
+				<form method="post" action="/login">
+					<div class="form-group">
+						<label for="username">Username:</label>
+						<input type="text" class="form-control" id="username" autocomplete="username" name="username">
+					</div>
+					<div class="form-group">
+						<label for="passphrase">Passphrase:</label>
+						<input type="password" class="form-control" id="passphrase" autocomplete="current-password" name="passphrase">
+					</div>
+					<button type="submit" class="btn btn-primary">Login</button>
+				</form>
+			</div>
 
-  <div class="col-sm-2" style="text-align:center">
-      OR
-  </div>
+			<div class="col-sm-2" style="text-align:center">
+				<h2>OR</h2>
+			</div>
 
-  <div class="col-sm-5">
-      <h2>Signup</h2>
-      <form method="post" action="/signup">
-          username: <input type="text" autocomplete="username" name="username"><br>
-          password
-             <input type="password" autocomplete="passphrase" name="passphrase"><br>
-          confirm password:
-              <input type="password" name="passphrase2"><br>
-        
-          age: <input type="number" name="age"><br>
-        
-        
-          <input type="submit">
-      </form>
-  </div>
-</div>
+			<div class="col-sm-5">
+				<h2>Signup</h2>
+				<form method="post" action="/signup">
+					<div class="form-group">
+						<label for="username">Username:</label>
+						<input type="text" class="form-control" id="username" autocomplete="username" name="username">
+					</div>
+					<div class="form-group">
+						<label for="passphrase">Passphrase:</label>
+						<input type="password" class="form-control" id="passphrase" autocomplete="new-password" name="passphrase">
+					</div>
+					<div class="form-group">
+						<label for="passphrase2">Confirm Password:</label>
+						<input type="password" class="form-control" id="passphrase2" name="passphrase2">
+					</div>
+					<div class="form-group">
+						<label for="age">Age:</label>
+						<input type="number" class="form-control" id="age" name="age">
+					</div>
+					<button type="submit" class="btn btn-primary">Signup</button>
+				</form>
+			</div>
+		</div>
+	</div>
 
+	<!-- Bootstrap JS -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</body>
+</html>

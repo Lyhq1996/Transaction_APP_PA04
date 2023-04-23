@@ -29,7 +29,17 @@ db.once('open', function() {
   console.log("we are connected!!!")
 });
 
-
+/* **************************************** */
+/*  middleware to make sure a user is logged in */
+/* **************************************** */
+function isLoggedIn(req, res, next) {
+  "if they are logged in, continue; otherwise redirect to /login "
+  if (res.locals.loggedIn) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+}
 
 /* **************************************** */
 /* Enable sessions and storing session data in the database */
@@ -47,18 +57,6 @@ store.on('error', function(error) {
   console.log(error);
 });
 
-
-/* **************************************** */
-/*  middleware to make sure a user is logged in */
-/* **************************************** */
-function isLoggedIn(req, res, next) {
-  "if they are logged in, continue; otherwise redirect to /login "
-  if (res.locals.loggedIn) {
-    next();
-  } else {
-    res.redirect("/login");
-  }
-}
 
 /* **************************************** */
 /* creating the app */
@@ -82,19 +80,14 @@ app.use(session({
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-
-
 app.use(pw_auth_router)
-
 app.use(layouts);
+
 
 app.get('/', (req,res,next) => {
   res.render('index');
@@ -108,6 +101,7 @@ app.get('/about',
 )
 
 // use relevant routes
+
 app.use(toDoRouter);
 app.use(transactionRouter);
 app.use(weatherRouter);
