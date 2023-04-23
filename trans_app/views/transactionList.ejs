@@ -3,6 +3,13 @@
   <div class="row">
     <div class="col">
       <h4 class="mb-2">Here is a list of your transactions!</h4>
+      <div class="d-flex justify-content-end mb-3">
+        <a href="/transaction/byCategory" class="btn btn-outline-danger me-2" id="groupByCategoryBtn">Group by category</a>
+        <a href="?sortBy=category" class="btn btn-outline-success me-2" id="sortByCategoryBtn">Sort by category</a>
+        <a href="?sortBy=amount" class="btn btn-outline-success me-2" id="sortByAmountBtn">Sort by amount</a>
+        <a href="?sortBy=description" class="btn btn-outline-success me-2" id="sortByDescriptionBtn">Sort by description</a>
+        <a href="?sortBy=date" class="btn btn-outline-success me-2" id="sortByDateBtn">Sort by date</a>
+      </div>
       <table class="table table-hover table-bordered table-striped">
         <thead class="table-dark">
           <tr>

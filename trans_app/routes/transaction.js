@@ -19,16 +19,47 @@ isLoggedIn = (req, res, next) => {
 }
 
 // Show all transaction items associated with the current user
-router.get('/transaction/', 
-  isLoggedIn, 
-  async (req, res, next) => {
-  let items = [];
-  // Show all transactions for the user (sorted by date)
-  items = await TransactionItem.find({
-    userId: req.user._id
-  }).sort({ date: -1 });
-  res.render('transactionList', { transactions: items });
-});
+// router.get('/transaction/', 
+//   isLoggedIn, 
+//   async (req, res, next) => {
+//   let items = [];
+//   // Show all transactions for the user (sorted by date)
+//   items = await TransactionItem.find({
+//     userId: req.user._id
+//   }).sort({ date: -1 });
+//   res.render('transactionList', { transactions: items });
+// });
+// Show/sort transactions by any column (using query string)
+router.get('/transaction/', isLoggedIn, async (req, res, next) => {
+  const sortByCol = req.query.sortBy;
+  let transactions = [];
+  switch(sortByCol) {
+    case "category":
+      transactions = await TransactionItem.find({
+        userId: req.user._id
+      }).sort({ amount: -1 });
+      break;
+    case "amount":
+      transactions = await TransactionItem.find({
+        userId: req.user._id
+      }).sort({ category: 1 });
+      break;
+    case "description":
+      transactions = await TransactionItem.find({
+        userId: req.user._id
+      }).sort({ description: -1 });
+      break;
+    case "date":
+      transactions = await TransactionItem.find({
+        userId: req.user._id
+      }).sort({ date: -1 });
+    default:
+      transactions = await TransactionItem.find({
+        userId: req.user._id
+      }).sort({ date: -1 });
+  }
+  res.render('transactionList',{transactions, sortByCol});
+})
 
 // Add a new transaction item
 router.post('/transaction', isLoggedIn, async (req, res, next) => {
@@ -63,36 +94,49 @@ router.post('/transaction/updateTransactionItem', isLoggedIn, async (req, res, n
 
 // Summarize transactions by category
 router.get('/transaction/byCategory', isLoggedIn, async (req, res, next) => {
-  const results = await TransactionItem.aggregate([
-    { $match: { userId: req.user._id } },
-    {
-      $group: {
-        _id: '$category',
-        total: { $sum: '$amount' }
-      }
-    },
-    { $sort: { total: -1 } }
-  ]);
-  res.render('groupByCategory', { results });
+  try {
+    const results = await TransactionItem.aggregate([
+      {$match: {
+          userId: req.user._id,
+        }},
+      {$group: {
+          _id: "$category",
+          total: {
+            $sum: "$amount",
+          },
+        }},
+      {$sort: {total: -1}},
+    ]);
+
+    res.render("groupByCategory", {
+      results,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
 });
 
-// Sort transactions by any column
-router.get('/transaction/sortBy/:columnName', isLoggedIn, async (req, res, next) => {
-  const columnName = req.params.columnName;
-  let items = [];
-  if (columnName === 'amount') {
-    items = await TransactionItem.find({
-      userId: req.user._id
-    }).sort({ amount: -1 });
-  } else if (columnName === 'category') {
-    items = await TransactionItem.find({
-      userId: req.user._id
-    }).sort({ category: 1 });
-  } else {
-    items = await TransactionItem.find({
-      userId: req.user._id
-    }).sort({ date: -1 });
-  }
-})
+// get the value associated to the key
+router.get('/todo/',
+  isLoggedIn,
+  async (req, res, next) => {
+      const show = req.query.show
+      const completed = show=='completed'
+      let items=[]
+      if (show) { // show is completed or todo, so just show some items
+        items = 
+          await ToDoItem.find({userId:req.user._id, completed})
+                        .sort({completed:1,priority:1,createdAt:1})
+      }else {  // show is null, so show all of the items
+        items = 
+          await ToDoItem.find({userId:req.user._id})
+                        .sort({completed:1,priority:1,createdAt:1})
+
+      }
+            res.render('toDoList',{items,show,completed});
+});
+
+
 
 module.exports = router;

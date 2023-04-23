@@ -1,7 +1,8 @@
-'use strict';
+// 'use strict';
 // require mongoose to create relevant schema
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+
 // get the objectId for user ref
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
