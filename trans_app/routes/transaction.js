@@ -18,17 +18,6 @@ isLoggedIn = (req, res, next) => {
   }
 }
 
-// Show all transaction items associated with the current user
-// router.get('/transaction/', 
-//   isLoggedIn, 
-//   async (req, res, next) => {
-//   let items = [];
-//   // Show all transactions for the user (sorted by date)
-//   items = await TransactionItem.find({
-//     userId: req.user._id
-//   }).sort({ date: -1 });
-//   res.render('transactionList', { transactions: items });
-// });
 // Show/sort transactions by any column (using query string)
 router.get('/transaction/', isLoggedIn, async (req, res, next) => {
   const sortByCol = req.query.sortBy;
@@ -37,22 +26,22 @@ router.get('/transaction/', isLoggedIn, async (req, res, next) => {
     case "category":
       transactions = await TransactionItem.find({
         userId: req.user._id
-      }).sort({ amount: -1 });
+      }).sort({ category: 1 });
       break;
     case "amount":
       transactions = await TransactionItem.find({
         userId: req.user._id
-      }).sort({ category: 1 });
+      }).sort({ amount: -1 });
       break;
     case "description":
       transactions = await TransactionItem.find({
         userId: req.user._id
-      }).sort({ description: -1 });
+      }).sort({ description: 1 });
       break;
     case "date":
       transactions = await TransactionItem.find({
         userId: req.user._id
-      }).sort({ date: -1 });
+      }).sort({ date: 1 });
     default:
       transactions = await TransactionItem.find({
         userId: req.user._id
